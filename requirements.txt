@@ -1,3 +1,5 @@
 streamlit
-pandas 
-BeautifulSoup 
+pandas
+beautifulsoup4
+selenium
+chromedriver-binary
