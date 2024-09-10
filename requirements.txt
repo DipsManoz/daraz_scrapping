@@ -1,6 +1,5 @@
-streamlit
+streamlit 
+selenium 
+webdriver-manager 
+beautifulsoup4 
 pandas
-beautifulsoup4
-selenium
-webdriver_manager
-chromedriver-binary
