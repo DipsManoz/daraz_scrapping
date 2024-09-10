@@ -1,24 +1,20 @@
 import streamlit as st
 import pandas as pd
-from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
 
-# Streamlit app title and description
-st.title("Product Price Scraper")
-st.write("Enter the URL of the product page to scrape product names and prices, then download the data as a CSV file.")
-
-# Method to extract data
 def extract(url):
-     # Set up Chrome options to run in headless mode
+    # Set up Chrome options to run in headless mode
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
-    
-    # Set up the WebDriver (make sure to have the correct ChromeDriver version installed)
-    driver = webdriver.Chrome(options=chrome_options)
+    # Use webdriver_manager to automatically manage ChromeDriver
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.get(url)
 
     # Extract the page source and parse it with BeautifulSoup
@@ -48,29 +44,21 @@ def extract(url):
 
     return product_price_df
 
-# Streamlit user input
-url = st.text_input("Enter the product page URL")
+# Streamlit App
+st.title("Product Price Extractor")
 
-# When the "Scrape Data" button is pressed
-if st.button("Scrape Data"):
+# Input field for URL
+url = st.text_input("Enter the URL of the product page:")
+
+if st.button("Extract"):
     if url:
-        with st.spinner('Scraping data...'):
+        with st.spinner("Extracting product information..."):
+            # Call the extract function and display the result in Streamlit
             try:
-                df = extract(url)
-                st.success("Data scraped successfully!")
-                st.write(df)
-
-                # Button to download the CSV file
-                csv = df.to_csv(index=False).encode('utf-8')
-                st.download_button(
-                    label="Download CSV",
-                    data=csv,
-                    file_name='product_price.csv',
-                    mime='text/csv',
-                )
+                product_data = extract(url)
+                st.success("Extraction successful!")
+                st.write(product_data)
             except Exception as e:
-                st.error(f"An error occurred: {e}")
+                st.error(f"Error: {e}")
     else:
-        st.warning("Please enter a URL.")
-
-
+        st.warning("Please enter a valid URL")
