@@ -18,7 +18,7 @@ def extract(url):
 
     
     # Set up the WebDriver (make sure to have the correct ChromeDriver version installed)
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(url)
 
     # Extract the page source and parse it with BeautifulSoup
