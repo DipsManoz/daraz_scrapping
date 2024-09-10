@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 # Streamlit app title and description
 st.title("Product Price Scraper")
@@ -9,6 +10,13 @@ st.write("Enter the URL of the product page to scrape product names and prices, 
 
 # Method to extract data
 def extract(url):
+     # Set up Chrome options to run in headless mode
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
+    
     # Set up the WebDriver (make sure to have the correct ChromeDriver version installed)
     driver = webdriver.Chrome()
     driver.get(url)
